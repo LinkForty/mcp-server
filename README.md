@@ -1,11 +1,21 @@
-# @linkforty/mcp-server
+<div align="center">
 
-[![npm version](https://img.shields.io/npm/v/@linkforty/mcp-server.svg)](https://www.npmjs.com/package/@linkforty/mcp-server)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# LinkForty MCP Server
 
-**Connect Claude, Cursor, Claude Code, and any other MCP-compatible AI tool to your LinkForty deep links and analytics.**
+**Connect Claude, Cursor, Claude Code, and any MCP-compatible AI tool to your LinkForty deep links and analytics.**
 
-This is the official [Model Context Protocol](https://modelcontextprotocol.io) server for [LinkForty](https://linkforty.com). It exposes 20 tools that let an AI assistant manage your deep links, query analytics, configure workspaces, and even generate ready-to-paste SDK integration code for your mobile apps - all using natural language.
+[![npm version](https://img.shields.io/npm/v/@linkforty/mcp-server.svg?style=flat-square&color=26adae)](https://www.npmjs.com/package/@linkforty/mcp-server)
+[![License: MIT](https://img.shields.io/badge/license-MIT-26adae.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![Node](https://img.shields.io/node/v/@linkforty/mcp-server.svg?style=flat-square&color=26adae)](https://nodejs.org)
+[![MCP](https://img.shields.io/badge/Model_Context_Protocol-1.0-26adae.svg?style=flat-square)](https://modelcontextprotocol.io)
+
+[Quick start](#quick-start) · [Available tools](#available-tools) · [Configuration](#configuration) · [LinkForty](https://linkforty.com)
+
+</div>
+
+---
+
+The official [Model Context Protocol](https://modelcontextprotocol.io) server for [LinkForty](https://linkforty.com). It exposes 20 tools that let an AI assistant manage your deep links, query analytics, configure workspaces, and even generate ready-to-paste SDK integration code for your mobile apps — all using natural language.
 
 ## What you can do with it
 
