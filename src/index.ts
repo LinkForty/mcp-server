@@ -17,7 +17,7 @@
  *         "command": "npx",
  *         "args": ["-y", "@linkforty/mcp-server"],
  *         "env": {
- *           "LINKFORTY_API_KEY": "lf_..."
+ *           "LINKFORTY_API_KEY": "dl_..."
  *         }
  *       }
  *     }

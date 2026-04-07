@@ -36,7 +36,7 @@ The AI calls the appropriate LinkForty API behind the scenes and returns structu
 
 1. Sign in to your [LinkForty dashboard](https://app.linkforty.com)
 2. Go to **Workspace Settings → API Keys**
-3. Click **Create API key**, copy the value (starts with `lf_`)
+3. Click **Create API key**, copy the value (starts with `dl_`)
 
 > **Note:** API keys are scoped to a single workspace. If you manage multiple workspaces, you can run multiple instances of the MCP server with different keys.
 
@@ -53,7 +53,7 @@ Edit your `claude_desktop_config.json` (location varies by OS - see [Anthropic's
       "command": "npx",
       "args": ["-y", "@linkforty/mcp-server"],
       "env": {
-        "LINKFORTY_API_KEY": "lf_your_api_key_here"
+        "LINKFORTY_API_KEY": "dl_your_api_key_here"
       }
     }
   }
@@ -72,7 +72,7 @@ Add to your Cursor settings under **MCP Servers**:
     "command": "npx",
     "args": ["-y", "@linkforty/mcp-server"],
     "env": {
-      "LINKFORTY_API_KEY": "lf_your_api_key_here"
+      "LINKFORTY_API_KEY": "dl_your_api_key_here"
     }
   }
 }
@@ -81,7 +81,7 @@ Add to your Cursor settings under **MCP Servers**:
 #### Claude Code
 
 ```bash
-claude mcp add linkforty -e LINKFORTY_API_KEY=lf_your_api_key_here -- npx -y @linkforty/mcp-server
+claude mcp add linkforty -e LINKFORTY_API_KEY=dl_your_api_key_here -- npx -y @linkforty/mcp-server
 ```
 
 ### 3. (Optional) Self-hosted LinkForty Core
@@ -90,7 +90,7 @@ If you're running LinkForty Core on your own infrastructure, set the base URL:
 
 ```json
 "env": {
-  "LINKFORTY_API_KEY": "lf_your_api_key_here",
+  "LINKFORTY_API_KEY": "dl_your_api_key_here",
   "LINKFORTY_BASE_URL": "https://your-linkforty-instance.com/api"
 }
 ```
@@ -151,7 +151,7 @@ If you're running LinkForty Core on your own infrastructure, set the base URL:
 
 | Environment variable  | Required   | Default                         | Description                                          |
 |-----------------------|------------|---------------------------------|------------------------------------------------------|
-| `LINKFORTY_API_KEY`   | Yes        | -                               | Your LinkForty workspace API key (starts with `lf_`) |
+| `LINKFORTY_API_KEY`   | Yes        | -                               | Your LinkForty workspace API key (starts with `dl_`) |
 | `LINKFORTY_BASE_URL`  | No         | `https://app.linkforty.com/api` | Override for self-hosted LinkForty Core instances    |
 
 ## Security and privacy
@@ -176,7 +176,7 @@ npm run build
 npm run dev
 
 # Test against your API key
-LINKFORTY_API_KEY=lf_... node dist/index.js
+LINKFORTY_API_KEY=dl_... node dist/index.js
 ```
 
 ## License
