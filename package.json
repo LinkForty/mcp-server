@@ -1,0 +1,51 @@
+{
+  "name": "@linkforty/mcp-server",
+  "version": "0.1.0",
+  "description": "Model Context Protocol (MCP) server for LinkForty — connect Claude, Cursor, and other AI tools to your deep links and analytics",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "linkforty-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "linkforty",
+    "deeplink",
+    "deep-linking",
+    "attribution",
+    "claude",
+    "cursor",
+    "ai-tools"
+  ],
+  "author": "LinkForty",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/linkforty/mcp-server"
+  },
+  "homepage": "https://linkforty.com",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
+  }
+}
