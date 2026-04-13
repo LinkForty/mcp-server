@@ -43,9 +43,17 @@ const linkInputSchema = z.object({
 export const createLinkTool = defineTool({
   name: 'create_link',
   description:
-    'Create a new deep link in LinkForty. Supports device-specific URLs (iOS App Store, Google Play, web fallback), UTM parameters, targeting rules, custom short codes, deep link parameters, attribution window, and expiration. Returns the created link with its short URL.',
+    'Create a new deep link in LinkForty. Supports device-specific URLs (iOS App Store, Google Play, web fallback), UTM parameters, targeting rules, custom short codes, deep link parameters, attribution window, and expiration. If no templateId or templateSlug is provided, the workspace default template is used automatically. Returns the created link with its short URL.',
   schema: linkInputSchema,
   handler: async (args, client) => {
+    // Auto-resolve the default template if none specified
+    if (!args.templateId && !args.templateSlug) {
+      const templates = await client.get<Array<{ id: string; is_default?: boolean }>>('/templates');
+      const defaultTemplate = templates.find((t) => t.is_default);
+      if (defaultTemplate) {
+        args.templateId = defaultTemplate.id;
+      }
+    }
     return client.post('/links', args);
   },
 });
@@ -125,11 +133,25 @@ export const deleteLinkTool = defineTool({
 export const bulkCreateLinksTool = defineTool({
   name: 'bulk_create_links',
   description:
-    'Create up to 100 deep links in a single request. Each link in the array uses the same shape as create_link. Returns the count and the array of created links. Useful for importing campaigns or generating links in bulk.',
+    'Create up to 100 deep links in a single request. Each link in the array uses the same shape as create_link. If no templateId or templateSlug is provided on a link, the workspace default template is used automatically. Returns the count and the array of created links. Useful for importing campaigns or generating links in bulk.',
   schema: z.object({
     links: z.array(linkInputSchema).min(1).max(100),
   }),
   handler: async (args, client) => {
+    // Auto-resolve default template for links that don't specify one
+    const needsDefault = args.links.some((l) => !l.templateId && !l.templateSlug);
+    let defaultTemplateId: string | undefined;
+    if (needsDefault) {
+      const templates = await client.get<Array<{ id: string; is_default?: boolean }>>('/templates');
+      defaultTemplateId = templates.find((t) => t.is_default)?.id;
+    }
+    if (defaultTemplateId) {
+      for (const link of args.links) {
+        if (!link.templateId && !link.templateSlug) {
+          link.templateId = defaultTemplateId;
+        }
+      }
+    }
     return client.post('/links/bulk-create', args);
   },
 });
