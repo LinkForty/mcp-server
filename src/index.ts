@@ -7,7 +7,7 @@
  *
  * Configuration via environment variables:
  *   - LINKFORTY_API_KEY (required) — your LinkForty workspace API key
- *   - LINKFORTY_BASE_URL (optional) — defaults to https://app.linkforty.com/api
+ *   - LINKFORTY_BASE_URL (optional) — defaults to https://api.linkforty.com/api
  *
  * Add this to your MCP client config:
  *

@@ -8,7 +8,7 @@
  *
  * Configuration via environment variables:
  *   - PORT                (optional) — HTTP port, defaults to 3001
- *   - LINKFORTY_BASE_URL  (optional) — defaults to https://app.linkforty.com/api
+ *   - LINKFORTY_BASE_URL  (optional) — defaults to https://api.linkforty.com/api
  *
  * Client-side MCP config (Claude Code, Cursor, etc.):
  *
@@ -31,7 +31,7 @@ import { createServer } from './server.js';
 import { allTools } from './tools/index.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
-const BASE_URL = (process.env.LINKFORTY_BASE_URL || 'https://app.linkforty.com/api').replace(/\/$/, '');
+const BASE_URL = (process.env.LINKFORTY_BASE_URL || 'https://api.linkforty.com/api').replace(/\/$/, '');
 
 /**
  * Extract the Bearer token from the Authorization header.

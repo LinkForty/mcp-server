@@ -197,7 +197,7 @@ export const getSdkInstallSnippetTool = defineTool({
     // because it lives in process.env. Pull it from the env via the client config.
     // We re-read process.env here since the client doesn't expose the key directly.
     const apiKey = process.env.LINKFORTY_API_KEY ?? 'YOUR_API_KEY';
-    const baseUrl = (process.env.LINKFORTY_BASE_URL || 'https://app.linkforty.com/api')
+    const baseUrl = (process.env.LINKFORTY_BASE_URL || 'https://api.linkforty.com/api')
       .replace(/\/api\/?$/, '');
 
     const generator = snippetGenerators[args.platform];

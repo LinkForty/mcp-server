@@ -205,14 +205,14 @@ LINKFORTY_BASE_URL=https://your-instance.com/api PORT=3001 npx -y @linkforty/mcp
 | Environment variable  | Required   | Default                         | Description                                          |
 |-----------------------|------------|---------------------------------|------------------------------------------------------|
 | `LINKFORTY_API_KEY`   | Yes        | —                               | Your LinkForty workspace API key (starts with `dl_`) |
-| `LINKFORTY_BASE_URL`  | No         | `https://app.linkforty.com/api` | Override for self-hosted LinkForty Core instances     |
+| `LINKFORTY_BASE_URL`  | No         | `https://api.linkforty.com/api` | Override for self-hosted LinkForty Core instances     |
 
 ### HTTP transport
 
 | Environment variable  | Required   | Default                         | Description                                          |
 |-----------------------|------------|---------------------------------|------------------------------------------------------|
 | `PORT`                | No         | `3001`                          | HTTP server port                                     |
-| `LINKFORTY_BASE_URL`  | No         | `https://app.linkforty.com/api` | Override for self-hosted LinkForty Core instances     |
+| `LINKFORTY_BASE_URL`  | No         | `https://api.linkforty.com/api` | Override for self-hosted LinkForty Core instances     |
 
 The API key is provided per-request via the `Authorization: Bearer` header, not as an environment variable. This allows a single HTTP server deployment to serve multiple users and workspaces.
 

@@ -16,7 +16,7 @@ export function loadConfig(): Config {
     );
   }
 
-  const baseUrl = (process.env.LINKFORTY_BASE_URL || 'https://app.linkforty.com/api')
+  const baseUrl = (process.env.LINKFORTY_BASE_URL || 'https://api.linkforty.com/api')
     .replace(/\/$/, '');
 
   return { apiKey, baseUrl };
