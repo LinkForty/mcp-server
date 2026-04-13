@@ -17,6 +17,11 @@
 
 The official [Model Context Protocol](https://modelcontextprotocol.io) server for [LinkForty](https://linkforty.com). It exposes 20 tools that let an AI assistant manage your deep links, query analytics, configure workspaces, and even generate ready-to-paste SDK integration code for your mobile apps — all using natural language.
 
+The server supports two transport modes:
+
+- **HTTP** (recommended) — connect via URL, no local installation needed
+- **stdio** — runs locally as a subprocess of your AI client
+
 ## What you can do with it
 
 Once connected, you can ask things like:
@@ -42,9 +47,51 @@ The AI calls the appropriate LinkForty API behind the scenes and returns structu
 
 ### 2. Add to your MCP client
 
-#### Claude Desktop
+#### Option A: HTTP transport (recommended)
 
-Edit your `claude_desktop_config.json` (location varies by OS - see [Anthropic's docs](https://docs.anthropic.com/en/docs/build-with-claude/computer-use)):
+No local installation required — just a URL and your API key.
+
+**Claude Desktop** — edit your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "linkforty": {
+      "type": "http",
+      "url": "https://mcp.linkforty.com/mcp",
+      "headers": {
+        "Authorization": "Bearer dl_your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+**Cursor** — add to **Cursor → Settings → MCP Servers**:
+
+```json
+{
+  "linkforty": {
+    "type": "http",
+    "url": "https://mcp.linkforty.com/mcp",
+    "headers": {
+      "Authorization": "Bearer dl_your_api_key_here"
+    }
+  }
+}
+```
+
+**Claude Code**:
+
+```bash
+claude mcp add linkforty --transport http --url https://mcp.linkforty.com/mcp --header "Authorization: Bearer dl_your_api_key_here"
+```
+
+#### Option B: stdio transport (local)
+
+Runs the MCP server as a local subprocess. Requires Node.js 18+.
+
+**Claude Desktop** — edit your `claude_desktop_config.json`:
 
 ```json
 {
@@ -60,11 +107,7 @@ Edit your `claude_desktop_config.json` (location varies by OS - see [Anthropic's
 }
 ```
 
-Restart Claude Desktop. The LinkForty tools will appear in the tool picker.
-
-#### Cursor
-
-Add to your Cursor settings under **MCP Servers**:
+**Cursor** — add to **Cursor → Settings → MCP Servers**:
 
 ```json
 {
@@ -78,7 +121,7 @@ Add to your Cursor settings under **MCP Servers**:
 }
 ```
 
-#### Claude Code
+**Claude Code**:
 
 ```bash
 claude mcp add linkforty -e LINKFORTY_API_KEY=dl_your_api_key_here -- npx -y @linkforty/mcp-server
@@ -86,12 +129,20 @@ claude mcp add linkforty -e LINKFORTY_API_KEY=dl_your_api_key_here -- npx -y @li
 
 ### 3. (Optional) Self-hosted LinkForty Core
 
-If you're running LinkForty Core on your own infrastructure, set the base URL:
+If you're running LinkForty Core on your own infrastructure, point the server at your instance.
+
+**HTTP transport** — host the MCP HTTP server yourself and set `LINKFORTY_BASE_URL`:
+
+```bash
+LINKFORTY_BASE_URL=https://your-instance.com/api PORT=3001 npx -y @linkforty/mcp-server-http
+```
+
+**stdio transport** — set the base URL in the env block:
 
 ```json
 "env": {
   "LINKFORTY_API_KEY": "dl_your_api_key_here",
-  "LINKFORTY_BASE_URL": "https://your-linkforty-instance.com/api"
+  "LINKFORTY_BASE_URL": "https://your-instance.com/api"
 }
 ```
 
@@ -149,17 +200,31 @@ If you're running LinkForty Core on your own infrastructure, set the base URL:
 
 ## Configuration
 
+### stdio transport
+
 | Environment variable  | Required   | Default                         | Description                                          |
 |-----------------------|------------|---------------------------------|------------------------------------------------------|
-| `LINKFORTY_API_KEY`   | Yes        | -                               | Your LinkForty workspace API key (starts with `dl_`) |
-| `LINKFORTY_BASE_URL`  | No         | `https://app.linkforty.com/api` | Override for self-hosted LinkForty Core instances    |
+| `LINKFORTY_API_KEY`   | Yes        | —                               | Your LinkForty workspace API key (starts with `dl_`) |
+| `LINKFORTY_BASE_URL`  | No         | `https://app.linkforty.com/api` | Override for self-hosted LinkForty Core instances     |
+
+### HTTP transport
+
+| Environment variable  | Required   | Default                         | Description                                          |
+|-----------------------|------------|---------------------------------|------------------------------------------------------|
+| `PORT`                | No         | `3001`                          | HTTP server port                                     |
+| `LINKFORTY_BASE_URL`  | No         | `https://app.linkforty.com/api` | Override for self-hosted LinkForty Core instances     |
+
+The API key is provided per-request via the `Authorization: Bearer` header, not as an environment variable. This allows a single HTTP server deployment to serve multiple users and workspaces.
 
 ## Security and privacy
 
-- **Your API key never leaves your machine.** It is only sent in `Authorization: Bearer` headers to the LinkForty API endpoint you configured.
-- **No data is stored or logged by the MCP server itself.** It is a stateless translator between MCP requests and LinkForty's REST API.
-- **API keys inherit your workspace permissions.** The MCP server can only do what your API key has permission to do - there's no privilege escalation.
-- The MCP server runs locally as a subprocess of your AI client and communicates over stdio, not the network.
+- **No data is stored or logged by the MCP server.** It is a stateless translator between MCP requests and LinkForty's REST API. Every tool call is a fresh HTTP request.
+- **API keys inherit your workspace permissions.** The MCP server can only do what your API key has permission to do — there's no privilege escalation.
+- **API keys are scoped to a single workspace.** A key for Workspace A cannot access Workspace B's data.
+
+**stdio mode:** The MCP server runs locally as a subprocess. Your API key is stored in your local MCP client config and only sent to the LinkForty API.
+
+**HTTP mode:** Your API key is sent in the `Authorization` header to the hosted MCP endpoint (`mcp.linkforty.com`), which forwards it to the LinkForty API. The MCP server does not store, log, or cache API keys.
 
 ## Development
 
@@ -175,8 +240,13 @@ npm run build
 # Watch mode
 npm run dev
 
-# Test against your API key
+# Test stdio transport
 LINKFORTY_API_KEY=dl_... node dist/index.js
+
+# Test HTTP transport
+node dist/http.js                           # starts on port 3001
+PORT=8080 node dist/http.js                 # custom port
+curl http://localhost:3001/health            # health check
 ```
 
 ## License
