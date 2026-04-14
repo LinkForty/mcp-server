@@ -1,6 +1,6 @@
 {
   "name": "@linkforty/mcp-server",
-  "version": "0.2.0-beta.0",
+  "version": "0.2.0",
   "description": "Model Context Protocol (MCP) server for LinkForty — connect Claude, Cursor, and other AI tools to your deep links and analytics",
   "type": "module",
   "main": "./dist/index.js",
