@@ -193,10 +193,10 @@ export const getSdkInstallSnippetTool = defineTool({
     const wsId = workspaces[0].id;
     const appConfig = await client.get<AppConfig>(`/workspaces/${wsId}/app-config`).catch(() => ({}));
 
-    // The MCP server doesn't have direct access to the user's API key string
-    // because it lives in process.env. Pull it from the env via the client config.
-    // We re-read process.env here since the client doesn't expose the key directly.
-    const apiKey = process.env.LINKFORTY_API_KEY ?? 'YOUR_API_KEY';
+    // Prefer the key the client was constructed with (works for in-process
+    // callers that don't use env vars). Fall back to env for stdio usage, and
+    // finally to a placeholder so the snippet is still copy-pasteable.
+    const apiKey = client.apiKey ?? process.env.LINKFORTY_API_KEY ?? 'YOUR_API_KEY';
     const baseUrl = (process.env.LINKFORTY_BASE_URL || 'https://api.linkforty.com/api')
       .replace(/\/api\/?$/, '');
 

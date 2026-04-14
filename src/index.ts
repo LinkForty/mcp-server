@@ -25,7 +25,7 @@
  */
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { loadConfig } from './config.js';
-import { LinkFortyClient } from './client.js';
+import { HttpLinkFortyClient } from './client.js';
 import { createServer } from './server.js';
 import { allTools } from './tools/index.js';
 
@@ -39,7 +39,7 @@ async function main() {
     process.exit(1);
   }
 
-  const client = new LinkFortyClient(config);
+  const client = new HttpLinkFortyClient(config);
   const server = createServer(client);
 
   const transport = new StdioServerTransport();

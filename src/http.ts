@@ -26,7 +26,7 @@
  */
 import { createServer as createHttpServer, IncomingMessage, ServerResponse } from 'node:http';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { LinkFortyClient } from './client.js';
+import { HttpLinkFortyClient } from './client.js';
 import { createServer } from './server.js';
 import { allTools } from './tools/index.js';
 
@@ -66,7 +66,7 @@ async function handleMcpRequest(req: IncomingMessage, res: ServerResponse): Prom
     return;
   }
 
-  const client = new LinkFortyClient({ apiKey, baseUrl: BASE_URL });
+  const client = new HttpLinkFortyClient({ apiKey, baseUrl: BASE_URL });
   const server = createServer(client);
 
   const transport = new StreamableHTTPServerTransport({
