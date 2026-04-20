@@ -8,6 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-26adae.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/node/v/@linkforty/mcp-server.svg?style=flat-square&color=26adae)](https://nodejs.org)
 [![MCP](https://img.shields.io/badge/Model_Context_Protocol-1.0-26adae.svg?style=flat-square)](https://modelcontextprotocol.io)
+[![MCP Badge](https://lobehub.com/badge/mcp/linkforty-mcp-server?style=flat)](https://lobehub.com/mcp/linkforty-mcp-server)
 
 [Quick start](#quick-start) · [Available tools](#available-tools) · [Configuration](#configuration) · [LinkForty](https://linkforty.com)
 
