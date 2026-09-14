@@ -35,6 +35,29 @@ const linkInputSchema = z.object({
   templateSlug: z.string().optional(),
   utmParameters: utmSchema,
   targetingRules: targetingSchema,
+  // In-app routing. appScheme supplies the scheme, deepLinkPath the destination
+  // inside it; together they are what makes a link open the app at a specific
+  // place rather than landing in a store or on the web.
+  //
+  // The length cap is a local copy of the API's, so an over-long value fails here
+  // with a clear message instead of as a remote 400. The API's own validation is
+  // authoritative and still runs.
+  appScheme: z
+    .string()
+    .regex(
+      /^[a-z][a-z0-9+.-]*$/,
+      'App scheme must start with a letter and contain only lowercase letters, digits, +, ., or -'
+    )
+    .max(255)
+    .optional()
+    .describe(
+      "The app's URL scheme, without '://' — e.g. 'myapp'. Call get_app_config to find the scheme configured for this workspace."
+    ),
+  deepLinkPath: z
+    .string()
+    .max(500)
+    .optional()
+    .describe("The in-app path the link opens, e.g. '/product/123'."),
   deepLinkParameters: z.record(z.any()).optional(),
   attributionWindowHours: z.number().int().min(1).max(2160).optional(),
   expiresAt: z.string().datetime().optional(),
@@ -43,7 +66,7 @@ const linkInputSchema = z.object({
 export const createLinkTool = defineTool({
   name: 'create_link',
   description:
-    'Create a new deep link in LinkForty. Supports device-specific URLs (iOS App Store, Google Play, web fallback), UTM parameters, targeting rules, custom short codes, deep link parameters, attribution window, and expiration. If no templateId or templateSlug is provided, the workspace default template is used automatically. Returns the created link with its short URL.',
+    'Create a new deep link in LinkForty. Supports in-app routing (open the app at a specific screen via appScheme and deepLinkPath), device-specific URLs (iOS App Store, Google Play, web fallback), UTM parameters, targeting rules, custom short codes, deep link parameters, attribution window, and expiration. If no templateId or templateSlug is provided, the workspace default template is used automatically. Returns the created link with its short URL.',
   schema: linkInputSchema,
   handler: async (args, client) => {
     // Auto-resolve the default template if none specified
@@ -95,7 +118,7 @@ export const getLinkTool = defineTool({
 export const updateLinkTool = defineTool({
   name: 'update_link',
   description:
-    'Update an existing deep link. All fields are optional — only provided fields are updated. Use this to change destinations, UTM parameters, targeting rules, status (active/inactive), or expiration.',
+    'Update an existing deep link. All fields are optional — only provided fields are updated. Use this to change destinations, in-app routing (appScheme, deepLinkPath), UTM parameters, targeting rules, status (active/inactive), or expiration.',
   schema: z.object({
     id: z.string().uuid().describe('Link UUID to update'),
     title: z.string().optional(),
@@ -107,6 +130,29 @@ export const updateLinkTool = defineTool({
     projectId: z.string().uuid().optional(),
     utmParameters: utmSchema,
     targetingRules: targetingSchema,
+    // In-app routing. appScheme supplies the scheme, deepLinkPath the destination
+    // inside it; together they are what makes a link open the app at a specific
+    // place rather than landing in a store or on the web.
+    //
+    // The length cap is a local copy of the API's, so an over-long value fails here
+    // with a clear message instead of as a remote 400. The API's own validation is
+    // authoritative and still runs.
+    appScheme: z
+      .string()
+      .regex(
+        /^[a-z][a-z0-9+.-]*$/,
+        'App scheme must start with a letter and contain only lowercase letters, digits, +, ., or -'
+      )
+      .max(255)
+      .optional()
+      .describe(
+        "The app's URL scheme, without '://' — e.g. 'myapp'. Call get_app_config to find the scheme configured for this workspace."
+      ),
+    deepLinkPath: z
+      .string()
+      .max(500)
+      .optional()
+      .describe("The in-app path the link opens, e.g. '/product/123'."),
     deepLinkParameters: z.record(z.any()).optional(),
     attributionWindowHours: z.number().int().min(1).max(2160).optional(),
     expiresAt: z.string().datetime().optional(),
