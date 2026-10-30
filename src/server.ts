@@ -5,6 +5,7 @@
  * registered. Used by both the stdio and HTTP entry points.
  */
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { VERSION } from './version.js';
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
@@ -17,7 +18,7 @@ export function createServer(client: LinkFortyClient): Server {
   const server = new Server(
     {
       name: 'linkforty-mcp',
-      version: '0.1.0',
+      version: VERSION,
     },
     {
       capabilities: {
