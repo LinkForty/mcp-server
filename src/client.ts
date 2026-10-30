@@ -7,6 +7,7 @@
  * wants to execute tools without a network hop.
  */
 import type { Config } from './config.js';
+import { USER_AGENT } from './version.js';
 
 export interface LinkFortyClient {
   /**
@@ -74,6 +75,8 @@ export class HttpLinkFortyClient implements LinkFortyClient {
     const headers: Record<string, string> = {
       Authorization: `Bearer ${this.config.apiKey}`,
       Accept: 'application/json',
+      // Lets the API tell MCP traffic apart from other API-key calls.
+      'User-Agent': USER_AGENT,
     };
 
     if (body !== undefined) {
